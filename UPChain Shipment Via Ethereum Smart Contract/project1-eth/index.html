@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>UPChain</h1>
+
+        <h2 id="productAdded"></h2>
+
+        <label for="name" class="col-lg-2 control-label">Product Name</label>
+        <input id="productName" type="text">
+
+        <label for="name" class="col-lg-2 control-label">Product Price \ 1000000000000000000</label>
+		<input id="productPrice" type="uint256">
+		
+		<label for="name" class="col-lg-2 control-label">Product No To Add Order</label>
+		<input id="addtoOrder" type="uint256">
+
+		<button id="button">Add Product</button>
+		<button id="button2">Add to Order</button>
+		<button id="button3">Complete Order</button>
+		<button id="button4">Withdraw Funds</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       // Our future code here..
+       var web3;
+       if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var project1Contract = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_productName",
+				"type": "string"
+			},
+			{
+				"name": "_productPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "addProduct",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_productNo",
+				"type": "uint256"
+			}
+		],
+		"name": "addtoOrder",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "completeOrder",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdrawFunds",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_buyerAd",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "buyerAd",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"name": "balanceOf",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getContractBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getOrderCost",
+		"outputs": [
+			{
+				"name": "totalCost",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "orderedProductseq",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "productCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_orderedProductseq",
+				"type": "uint256"
+			}
+		],
+		"name": "querryOrderedProduct",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_productCount",
+				"type": "uint256"
+			}
+		],
+		"name": "queryProduct",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+        ]);
+
+        //Bu address Contractin kendi adresi oluşturduktan sonra copy paste
+        var project1 = project1Contract.at('0xfc3811448f73225fb84dc78c1494cd31247ef769');
+        console.log(project1);
+		const buyerAddress = '0xd6c4280fb07063d1bed7065ed227ec25ca00a97c';
+		const sellerAddress = '0x0a8717c6917999c4afa74262628a2fc8080f3c92';
+
+		//Buttonlarin işlevlerini tanimlamaya baslangic
+
+		//AddProduct
+        $("#button").click(function(){
+            project1.addProduct($('#productName').val(),$('#productPrice').val());
+		});
+		
+		//add to Order
+		$("#button2").click(function(){
+			project1.addtoOrder($('#productNo').val());
+		});
+
+		$("#button3").click(function(){
+			project1.completeOrder();
+		});
+
+		$("#button4").click(function(){
+			project1.withdrawFunds();
+		});
+
+    </script>
+
+</body>
+</html>
